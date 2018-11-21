@@ -1,0 +1,12 @@
+logging:
+  config: classpath:config/logback.xml
+#logging:
+#  file: /rule-engine-logs/${spring.application.name}/root.log
+#  level: 
+#    root: INFO
+rule:
+  template:
+    condition:
+      header-file: rule/template/ConditionHeaderFile.txt
+    field:
+      header-file: rule/template/FieldHeaderFile.txt

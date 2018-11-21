@@ -1,0 +1,206 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>rule-engine</groupId>
+		<artifactId>rule-engine</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>rule-engine-kafka</artifactId>
+	<name>rule-engine-kafka</name>
+	<packaging>jar</packaging>
+	<properties>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>rule-engine</groupId>
+			<artifactId>rule-engine-core</artifactId>
+		</dependency>
+		<!-- mqtt消息 start -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-integration</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-stream</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+			<version>1.3.7.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-consul-discovery</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tencent.tsf</groupId>
+			<artifactId>spring-cloud-tsf-sleuth</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tencent.tsf</groupId>
+			<artifactId>spring-cloud-tsf-metrics</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tencent.tsf</groupId>
+			<artifactId>spring-cloud-tsf-route</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-feign</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<!-- 本地开发环境 -->
+			<id>dev</id>
+			<properties>
+				<profiles.active>dev</profiles.active>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<!-- 测试环境 -->
+			<id>test</id>
+			<properties>
+				<profiles.active>test</profiles.active>
+			</properties>
+		</profile>
+		<profile>
+			<!-- 生产环境 -->
+			<id>pro</id>
+			<properties>
+				<profiles.active>pro</profiles.active>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<!-- 资源根目录排除各环境的配置，防止在生成目录中多余其它目录 -->
+				<excludes>
+					<exclude>test/*</exclude>
+					<exclude>pro/*</exclude>
+					<exclude>dev/*</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources/${profiles.active}</directory>
+			</resource>
+			<resource>
+				<directory>src/main/docker</directory>
+				<targetPath>${project.build.outputDirectory}/../</targetPath>
+			</resource>
+			<resource>
+				<directory>src/main/run</directory>
+				<targetPath>${project.build.outputDirectory}/../</targetPath>
+			</resource>
+			<resource>
+				<directory>src/main/resources/config</directory>
+				<targetPath>${project.build.outputDirectory}/../</targetPath>
+				<includes>
+					<include>kafka_client_jaas.conf</include>
+				</includes>
+			</resource>
+		</resources>
+		<defaultGoal>package</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok-maven-plugin</artifactId>
+				<version>1.18.0.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>delombok</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- 去除不需要的文件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<!-- 添加index则不从mainfest中读取classpath，而是从Index.list中读取 -->
+						<!-- <index>true</index> -->
+						<manifest>
+							<mainClass>com.foxconn.core.pro.server.rule.engine.kafka.KafkaApplication</mainClass>
+							<!-- to create a class path to your dependecies you have to fill true 
+								in this field -->
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+						</manifest>
+						<manifestEntries>
+							<Class-Path>./</Class-Path>
+						</manifestEntries>
+					</archive>
+					<excludes>
+						<exclude>**/test/**</exclude>
+						<exclude>/messages/**</exclude>
+						<exclude>/rule/**</exclude>
+						<exclude>/config/**</exclude>
+						<exclude>/mapper/**</exclude>
+						<exclude>/static/**</exclude>
+						<exclude>**/*.yml</exclude>
+						<exclude>*.yml</exclude>
+						<exclude>*.txt</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<!-- 让lombk生效 -->
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+			</plugin>
+			<!-- spring boot 打包 -->
+			<!-- <plugin> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-maven-plugin</artifactId> 
+				</plugin> -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<appendAssemblyId>false</appendAssemblyId>
+					<descriptors>
+						<descriptor>src/main/build/package.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

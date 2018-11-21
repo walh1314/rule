@@ -1,0 +1,82 @@
+server:
+  port: 18082
+spring:
+  application:
+    name: rule-engine-rabbitmq
+  ## rabiitmq支持
+  rabbitmq:
+    #host: 134.175.75.240
+#    addresses: 127.0.0.1:5672
+#    #username: root
+#    username: guest
+#    #password: foxconn168
+#    password: guest
+#    publisher-confirms: true
+#    virtual-host: /
+    action:
+      address: 172.16.16.3:31861
+      username: root
+      password: foxconn168
+      virtual-host: /
+      exchange: rule.engine.action.exchange
+      queue: rule.engine.action.queue
+      topic: rule.engine.to.action
+      exchange-durable: true
+      exchange-auto-delete: false
+      queue-durable: true
+      queue-auto-delete: false
+      exclusive: false
+    source:
+      address: 172.16.16.3:31861
+      username: root
+      password: foxconn168
+      virtual-host: /
+      exchange: rule_engine
+      queue: rule_engine
+      topic: rule_engine.event
+      exchange-durable: true
+      exchange-auto-delete: false
+      queue-durable: true
+      queue-auto-delete: false
+      exclusive: false
+      default-concurrent: 10
+      default-prefetch-count: 50
+  #redis数据源配置
+  redis:
+    host: 172.16.16.56
+    timeout: 1000
+    port: 6379
+    password: foxconn168!
+    pool:
+      max-idle: 10
+      max-active: 30
+      max-wait: 18000
+      min-idle: 0
+#三方接口
+thirdparty:
+  core:
+    pro:
+      common: 
+        topic-url: http://172.16.16.16:30831/corepro-common/kafkatopic
+        uer-info-url: http://172.16.16.16:30831/corepro-common/userid
+        user-database-url: http://172.16.16.16:30831/corepro-common/userDatabase
+com:
+  server:
+    account: simulator
+    topic: simulator
+    front: rule-engine-front
+    front-url: 
+    front-params: 
+      x-micro-service-name: rule-engine-front
+      x-name-space-code: default-code
+  mqtt:
+    task:
+      core-pool-size: 100
+      keep-alive-seconds: 30000
+      max-pool-size: 500
+      percentage: 100
+      queue-capacity: 200
+      sleep-time: 2
+tsf:
+  auth:
+    enable: false

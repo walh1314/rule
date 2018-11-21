@@ -1,0 +1,75 @@
+server:
+  port: 18089
+spring:
+  application:
+    name: rule-engine-action
+  rabbitmq:
+    #host: 134.175.75.240
+    addresses: 172.31.48.4:32689
+    #username: root
+    username: root
+    #password: foxconn168
+    password: foxconn168
+    virtual-host: /
+  #redis数据源配置
+  redis:
+    host: 172.31.64.4
+    timeout: 1000
+    port: 6379
+    password: foxconn0
+    pool:
+      max-idle: 10
+      max-active: 30
+      max-wait: 18000
+      min-idle: 0
+  kafka:
+    producer:
+      bootstrap-servers: 172.31.32.39:9092,172.31.32.46:9092,172.31.32.12:9092
+#三方接口
+thirdparty:
+  core:
+    pro:
+      common: 
+        topic-url: http://172.31.48.12:30750/corepro-common/kafkatopic
+        uer-info-url: http://172.31.48.12:30750/corepro-common/userid
+com:
+  email: 
+    url: http://172.31.48.12:30750/corepro-common/email
+  sms: 
+    url: http://172.31.48.12:30750/corepro-common/sms
+  server:
+    account: simulator
+    topic: simulator
+    front: rule-engine-front
+    front-url: 
+    front-params: 
+      x-micro-service-name: rule-engine-front
+      x-name-space-code: default-code
+  rule:
+    engine:
+      action:
+        rabbitmq:
+          topic: rule.engine.to.action
+          queue: rule.engine.action.queue
+          exchange: rule.engine.action.exchange
+          exchange-durable: true
+          exchange-auto-delete: false
+          queue-durable: true
+          queue-auto-delete: false
+          exclusive: false
+          concurrent: 400
+          prefetch-count: 200
+  mqtt:
+    outbound:
+     #ssl://192.168.1.10:1883 tcp://192.168.1.10:1883
+      url: tcp://134.175.75.199:1883
+      clientId: core_pro_server_rule_engine_action
+      #/sys/{productKey}/{deviceName}/thing/event/{事件标识}/pos
+      #topics: /sys/+/+/thing/event/+/pos
+      topic: /sys/+/+/thing/event/+/post
+      qos: 1
+      username: corePro
+      password: foxconn168!
+tsf:
+  auth:
+    enable: false

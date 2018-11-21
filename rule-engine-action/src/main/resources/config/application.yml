@@ -1,0 +1,9 @@
+logging:
+  config: classpath:config/logback.xml
+#logging:
+#  file: /rule-engine-logs/${spring.application.name}/root.log
+#  level: 
+#    root: INFO
+management:
+  security:
+    enabled: false

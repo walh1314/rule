@@ -1,0 +1,125 @@
+server:
+  port: 8282
+spring:
+  application:
+    name: rule-engine-front
+  messages:
+    encoding: UTF-8
+    basename: /messages/lamp-messages
+    cache-duration: 300
+tsf:
+  auth:
+    enable: false
+logging:
+  level:
+   com.foxconn.core.pro.server.rule.engine.front.thirdparty.clound.AccountDbService: DEBUG
+jasypt:
+  encryptor:
+    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ7
+rule:
+  template:
+    condition:
+      header-file: rule/template/ConditionHeaderFile.txt
+    field:
+      header-file: rule/template/FieldHeaderFile.txt
+com:
+  sql:
+    function: 
+      maps: 
+        abs:
+          params: 
+            - {types: java.lang.Number,num: 1}
+        asin: 
+           params:
+            - {types: java.lang.Number,num: 1}
+        concat_ws: 
+            params: 
+            - {types: java.lang.Object,num: 1}
+            - {types: java.lang.Object,num: 1}
+            - {types: java.lang.Object,num: 1}
+            - {types: java.lang.Object,num: -1}
+        concat: 
+            params: 
+            - {types: java.lang.Object,num: 1}
+            - {types: java.lang.Object,num: 1}            
+            - {types: java.lang.Object,num: -1}
+        cos: 
+          params:
+            - {types: java.lang.Number,num: 1}
+        cosh: 
+          params:
+            - {types: java.lang.Number,num: 1}
+        crypto: 
+          params:
+            - {types: java.lang.Object,num: 1}
+            - {types: java.lang.Object,num: 1,values: MD2;MD5;SHA1;SHA-256;SHA-384;SHA-512}
+        deviceName: 
+          cls: 
+        endswith: 
+          params:
+            - {types: java.lang.Object,num: 1}
+            - {types: java.lang.Object,num: 1}
+        exp: 
+          params:
+            - {types: java.lang.Number,num: 1}
+        floor: 
+          params:
+            - {types: java.lang.Number,num: 1}
+        log: 
+          params: 
+            - {types: java.lang.Number,num: 1}
+            - {types: java.lang.Number,num: 0}
+        lower: 
+          params:
+            - {types: java.lang.Object,num: 1}
+        modulo: 
+          params:
+            - {types: java.lang.Number,num: 1}
+            - {types: java.lang.Number,num: 1}
+        nanvl: 
+          params: 
+            - {types: java.lang.Object,num: 1}
+            - {types: java.lang.Object,num: 1}
+        newuuid: 
+          cls: 
+        power: 
+          params:
+            - {types: java.lang.Number,num: 1}
+            - {types: java.lang.Number,num: 1}
+        productId: 
+          cls: 
+        random: 
+          cls: 
+        randint: 
+          params: 
+            - {types: java.lang.Number,num: 1}
+            - {types: java.lang.Number,num: 1}
+        replace: 
+          params:
+            - {types: java.lang.Object,num: 1}
+            - {types: java.lang.Object,num: 1}
+            - {types: java.lang.Object,num: 1}
+        sin: 
+          params:
+            - {types: java.lang.Number,num: 1}
+        sinh: 
+          params:
+            - {types: java.lang.Number,num: 1}
+        tan: 
+          params:
+            - {types: java.lang.Number,num: 1}
+        tanh: 
+          params: 
+            - {types: java.lang.Number,num: 1}
+        timestamp: 
+          params: 
+            - {types: java.lang.String,num: 0}
+        topic: 
+          cls: 
+          params: 
+            - {types: java.lang.Number,num: 0}
+        upper: 
+          params: 
+            - {types: java.lang.Object,num: 1}
+
+            

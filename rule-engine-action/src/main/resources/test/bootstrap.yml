@@ -1,0 +1,83 @@
+server:
+  port: 18089
+spring:
+  application:
+    name: rule-engine-action
+  rabbitmq:
+    #host: 134.175.75.240
+    addresses: 172.16.16.3:31861
+    #username: root
+    username: root
+    #password: foxconn168
+    password: foxconn168
+    virtual-host: /
+  #redis数据源配置
+  redis:
+    host: 172.16.16.56
+    timeout: 1000
+    port: 6379
+    password: foxconn168!
+    pool:
+      max-idle: 10
+      max-active: 30
+      max-wait: 18000
+      min-idle: 0
+  kafka:
+    producer:
+      bootstrap-servers: 172.18.0.25:9092,172.18.0.47:9092,172.18.0.44:9092
+
+#三方接口
+thirdparty:
+  core:
+    pro:
+      common: 
+        topic-url: http://172.16.16.16:30831/corepro-common/kafkatopic
+        uer-info-url: http://172.16.16.16:30831/corepro-common/userid
+com:
+  email: 
+    url: http://172.16.16.16:30831/corepro-common/email
+  sms: 
+    url:  http://172.16.16.16:30831/corepro-common/sms
+  server:
+    account: simulator
+    topic: simulator
+    front: rule-engine-front
+    front-url: 
+    front-params: 
+      x-micro-service-name: rule-engine-front
+      x-name-space-code: default-code
+  rule:
+    engine:
+      action:
+        rabbitmq:
+          topic: rule.engine.to.action
+          queue: rule.engine.action.queue
+          exchange: rule.engine.action.exchange
+          exchange-durable: true
+          exchange-auto-delete: false
+          queue-durable: true
+          queue-auto-delete: false
+          exclusive: false
+          concurrent: 400
+          prefetch-count: 200
+  mqtt:
+    outbound:
+     #ssl://192.168.1.10:1883 tcp://192.168.1.10:1883
+     #193.112.225.54 MQTT port 1883 172.16.16.16 30381
+     # url: tcp://172.16.16.3:31736
+      #url: tcp://172.16.16.16:30381
+      url: tcp://172.16.16.16:30381
+      clientId: core_pro_server_rule_engine_action
+      #/sys/{productKey}/{deviceName}/thing/event/{事件标识}/pos
+      #topics: /sys/+/+/thing/event/+/pos
+      topic: /sys/+/+/thing/event/+/post
+      qos: 1
+      #corePro
+      #username: admin
+      username: corePro
+      #foxconn168!
+      #password: admin
+      password: foxconn168!
+tsf:
+  auth:
+    enable: false

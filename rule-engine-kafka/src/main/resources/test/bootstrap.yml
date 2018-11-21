@@ -1,0 +1,71 @@
+server:
+  port: 18082
+spring:
+  application:
+    name: rule-engine-kafka
+  rabbitmq:
+    action:
+      address: 172.16.16.3:31861
+      username: root
+      password: foxconn168
+      virtual-host: /
+      exchange: rule.engine.action.exchange
+      queue: rule.engine.action.queue
+      topic: rule.engine.to.action
+      exchange-durable: true
+      exchange-auto-delete: false
+      queue-durable: true
+      queue-auto-delete: false
+      exclusive: false
+  #redis数据源配置
+  redis:
+    host: 172.16.16.56
+    timeout: 1000
+    port: 6379
+    password: foxconn168!
+    pool:
+      max-idle: 10
+      max-active: 30
+      max-wait: 18000
+      min-idle: 0
+#三方接口
+thirdparty:
+  core:
+    pro:
+      common: 
+        topic-url: http://172.16.16.16:30831/corepro-common/kafkatopic
+        uer-info-url: http://172.16.16.16:30831/corepro-common/userid
+        user-database-url: http://172.16.16.16:30831/corepro-common/userDatabase
+com:
+  server:
+    account: simulator
+    topic: simulator
+    front: rule-engine-front
+    front-url: 
+    front-params: 
+      x-micro-service-name: rule-engine-front
+      x-name-space-code: default-code
+tsf:
+  auth:
+    enable: false
+kafka:
+  consumer:
+    #servers: 111.230.238.71:9092,193.112.41.80:9092,123.207.122.17:9092
+    servers: 172.16.16.23:9092,172.16.16.67:9092,172.16.16.125:9092
+    group.id: kafka03
+    enable.auto.commit: true
+    # 会话超时 ， 单位：毫秒
+    session.timeout.ms: 60000
+    max.poll.records: 200
+    # 自动提交间隔时间，单位：毫秒
+    auto.commit.interval: 3000
+    # earliest    latest
+    auto.offset.reset: latest
+    # 并发数
+    concurrency: 100
+    # 鉴权方式配置
+    properties:
+      sasl.mechanism: PLAIN
+      security.protocol: SASL_PLAINTEXT
+    # 基础版通配 topic  _data.*
+    base.topic: -data.*

@@ -1,0 +1,11 @@
+logging:
+  config: classpath:config/logback-spring.xml
+management:
+  security:
+    enabled: false
+rule:
+  template:
+    condition:
+      header-file: rule/template/ConditionHeaderFile.txt
+    field:
+      header-file: rule/template/FieldHeaderFile.txt
